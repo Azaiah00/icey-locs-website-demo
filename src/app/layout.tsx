@@ -6,6 +6,7 @@ import { RevealObserver } from "@/components/motion";
 import { FrostPopup } from "@/components/FrostPopup";
 import { DemoTour } from "@/components/DemoTour";
 import { SITE_URL } from "@/lib/schema";
+import { baseOpenGraph, baseTwitter, SITE_DESCRIPTION, SITE_TITLE } from "@/lib/seo";
 import "./globals.css";
 
 // Self-hosted variable fonts (SIL OFL) — no network at build time.
@@ -26,19 +27,14 @@ const archivo = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Icey Locs | Loc Spa & Loc Repair in Inglewood, CA",
+    default: SITE_TITLE,
     template: "%s | Icey Locs",
   },
-  description:
-    "Private loc suites at Hollywood Park, steps from SoFi Stadium. Retwists, loc repair, starter & instant locs, extensions and braids. Open daily 9–7.",
-  openGraph: {
-    type: "website",
-    siteName: "Icey Locs — Loc Spa",
-    locale: "en_US",
-    images: [{ url: "/images/space/suite-wide-1280.webp", width: 1280, height: 714, alt: "The Icey Locs private loc spa suite" }],
-  },
-  twitter: { card: "summary_large_image" },
-  icons: { icon: "/icon.svg" },
+  description: SITE_DESCRIPTION,
+  applicationName: "Icey Locs",
+  openGraph: baseOpenGraph,
+  twitter: baseTwitter,
+  icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {

@@ -3,6 +3,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Public address used in link previews, canonical tags and the sitemap. Change to https://iceylocs.com at launch.
+  NEXT_PUBLIC_SITE_URL = "https://icey-locs-website-demo.netlify.app"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

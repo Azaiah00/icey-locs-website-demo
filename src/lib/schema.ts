@@ -6,7 +6,12 @@ import { business, locations } from "@/data/business";
 import { faqs } from "@/data/faq";
 import { fromPrice, services, type Service } from "@/data/services";
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://iceylocs.com").replace(/\/$/, "");
+/**
+ * The site's public address — used for link previews (og:image / og:url), canonical tags, sitemap and JSON-LD.
+ * Order: NEXT_PUBLIC_SITE_URL (set in netlify.toml) → Netlify's own site URL at build time → the demo address.
+ * When the site moves to iceylocs.com, change NEXT_PUBLIC_SITE_URL in netlify.toml to "https://iceylocs.com".
+ */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.URL || "https://icey-locs-website-demo.netlify.app").replace(/\/$/, "");
 
 const hours = (locId: "loc-spa" | "barber-spa") =>
   locations

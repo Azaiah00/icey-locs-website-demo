@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Icey Locs — "Icey Night Spa" tokens (DESIGN.md §2). Do not add
+   colors, fonts, radii or shadows outside this block.
+---------------------------------------------------------------- */
+@theme {
+  --color-midnight: #0a0e16;
+  --color-night: #111826;
+  --color-slate: #1b2433;
+  --color-steel: #293344;
+  --color-glacier: #2a5e87;
+  --color-frost: #657f94;
+  --color-ice: #b9cbe5;
+  --color-ice-bright: #dce8f6;
+  --color-snow: #f2f6fb;
+  --color-mist: #9aa6b8;
+  --color-frost-bg: #e9eff6;
+  --color-ink: #0b111e;
+  --color-ink-soft: #4a5a6e;
+  --color-glacier-deep: #1f4b6e;
+  --color-danger: #ff6b6b;
+
+  --radius-pill: 999px;
+  --radius-card: 20px;
+  --radius-img: 16px;
+  --radius-input: 12px;
+
+  --shadow-glow: 0 0 0 1px rgb(185 203 229 / 0.18), 0 10px 40px -10px rgb(42 94 135 / 0.55);
+  --shadow-card: 0 1px 0 0 rgb(185 203 229 / 0.06) inset, 0 24px 60px -24px rgb(0 0 0 / 0.7);
+  --ease-ice: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* next/font/local sets --font-league / --font-archivo on <html>; map them to theme utilities */
+@theme inline {
+  --font-display: var(--font-league), "League Spartan", system-ui, sans-serif;
+  --font-body: var(--font-archivo), "Archivo", system-ui, sans-serif;
+}
+
+:root {
+  --grad-brand: linear-gradient(135deg, #2a5e87 0%, #657f94 100%);
+  --grad-led: linear-gradient(90deg, transparent, #b9cbe5 50%, transparent);
+  --grad-night: radial-gradient(120% 80% at 70% 0%, #16223a 0%, #0a0e16 60%);
+  color-scheme: dark;
+}
+
+/* ---------- Custom scrollbar (DESIGN.md §7) ---------- */
+html {
+  scrollbar-color: #657f94 #0a0e16;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0a0e16; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#b9cbe5, #2a5e87);
+  border-radius: 999px;
+  border: 2px solid #0a0e16;
+}
+::-webkit-scrollbar-thumb:hover { background: #b9cbe5; }
+::selection { background: #2a5e87; color: #f2f6fb; }
+:focus-visible { outline: 2px solid #b9cbe5; outline-offset: 3px; border-radius: 4px; }
+/* Headings that receive focus programmatically (step changes) don't need a ring. */
+[tabindex="-1"]:focus, [tabindex="-1"]:focus-visible { outline: none; }
+
+body {
+  background: var(--color-midnight);
+  color: var(--color-snow);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 1024px) { body { font-size: 18px; } }
+
+/* ---------- Type helpers ---------- */
+.font-display { font-family: var(--font-display); }
+.h-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.h-section {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+}
+.kicker {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.kicker::before, .kicker::after { content: ""; width: 24px; height: 1px; background: currentColor; opacity: 0.6; }
+
+/* ---------- Signature surfaces ---------- */
+.led-line { height: 1px; background: var(--grad-led); }
+.frost-card {
+  background: rgb(27 36 51 / 0.6);
+  border: 1px solid rgb(185 203 229 / 0.1);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+@supports (backdrop-filter: blur(12px)) {
+  .frost-card { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+}
+.led-top { position: relative; }
+.led-top::before {
+  content: ""; position: absolute; left: 12%; right: 12%; top: 0; height: 1px;
+  background: var(--grad-led); opacity: 0; transition: opacity 0.5s var(--ease-ice);
+}
+.led-top:hover::before, .led-top:focus-within::before { opacity: 1; }
+.bg-night-grad { background: var(--grad-night); }
+.text-balance { text-wrap: balance; }
+
+/* Ice duotone for warm-background client photos (DESIGN.md §6) */
+/* Desktop (hover) only: phones and tablets always see her work in full colour — there is no hover to reveal it. */
+@media (hover: hover) and (pointer: fine) {
+.duotone { position: relative; isolation: isolate; }
+.duotone img { filter: grayscale(1) contrast(1.05); transition: filter 0.4s var(--ease-ice); }
+.duotone::after {
+  content: ""; position: absolute; inset: 0; background: #2a5e87; mix-blend-mode: color;
+  opacity: 0.55; transition: opacity 0.4s var(--ease-ice); pointer-events: none;
+}
+.duotone:hover img, .duotone:focus-within img, .duotone[data-revealed="true"] img { filter: none; }
+.duotone:hover::after, .duotone:focus-within::after, .duotone[data-revealed="true"]::after { opacity: 0; }
+}
+
+/* ---------- Responsive guards ---------- */
+/* Form controls never force their container wider than the screen (inputs default to ~20ch). */
+input, select, textarea { min-width: 0; max-width: 100%; }
+/* Long words (big display headlines on 320px phones) break instead of overflowing. */
+h1, h2, h3 { overflow-wrap: break-word; }
+img, video, svg { max-width: 100%; }
+
+/* ---------- Reveal-on-view (IntersectionObserver adds .is-in) ---------- */
+/* Content is visible by default; hiding only happens once JS has proven it can reveal it again. */
+.reveal-ready .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.8s var(--ease-ice), transform 0.8s var(--ease-ice); transition-delay: var(--d, 0ms); }
+.reveal-ready .reveal.is-in { opacity: 1; transform: none; }
+
+/* ---------- Hero: frost clears ---------- */
+@property --clear { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+@keyframes frost-clear {
+  0% { --clear: 0%; opacity: 0.9; }
+  100% { --clear: 140%; opacity: 0; }
+}
+/* Invisible unless the animation actually runs — a stalled page never shows frost over the headline. */
+.frost-layer.run { animation: frost-clear 1.6s var(--ease-ice) 0.2s both; }
+.frost-layer.done { display: none; }
+.frost-layer {
+  opacity: 0;
+  position: absolute; inset: -8% -4%; pointer-events: none;
+  background: url("/images/texture/frost-1280.webp") center / cover no-repeat;
+  mix-blend-mode: screen;
+  /* radial "thaw" hole, intersected with soft edge fades so the frost never shows a hard rectangle */
+  -webkit-mask-image: radial-gradient(circle at var(--fx, 30%) var(--fy, 60%), transparent var(--clear, 0%), #000 calc(var(--clear, 0%) + 18%)), linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent), linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  -webkit-mask-composite: source-in, source-in;
+  mask-image: radial-gradient(circle at var(--fx, 30%) var(--fy, 60%), transparent var(--clear, 0%), #000 calc(var(--clear, 0%) + 18%)), linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent), linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  mask-composite: intersect;
+}
+@keyframes led-sweep { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.led-sweep { transform-origin: left; animation: led-sweep 0.9s var(--ease-ice) 1.2s both; }
+
+/* ---------- Hero: slow push-in + LED breathing ---------- */
+@keyframes kenburns { from { transform: scale(1.12) translate3d(-1%, 1%, 0); } to { transform: scale(1) translate3d(0, 0, 0); } }
+.kenburns { animation: kenburns 14s var(--ease-ice) both; transform-origin: 60% 40%; }
+@keyframes led-breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.7; } }
+.led-glow { background: radial-gradient(50% 60% at 60% 45%, rgb(185 203 229 / 0.18), transparent 70%); animation: led-breathe 6s ease-in-out infinite; mix-blend-mode: screen; }
+
+/* ---------- Work ribbon + kinetic type ---------- */
+@keyframes ribbon { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+.ribbon-mask { -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.kinetic-outline { color: transparent; -webkit-text-stroke: 1.5px rgb(185 203 229 / 0.55); }
+
+/* ---------- Ice crown emblem (her logo) ---------- */
+/* Overlays are clipped to the logo by its own alpha channel. */
+.emblem-mask {
+  pointer-events: none;
+  -webkit-mask: url("/images/brand/icey-crown-alpha.webp") center / contain no-repeat;
+  mask: url("/images/brand/icey-crown-alpha.webp") center / contain no-repeat;
+}
+.emblem-frost { background: url("/images/texture/frost-1280.webp") center / cover no-repeat, rgb(220 230 242 / 0.55); }
+.emblem-shine {
+  background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.85) 50%, transparent 62%) no-repeat;
+  background-size: 300% 100%;
+  background-position: 150% 0;
+  animation: emblem-shine 1.5s var(--ease-ice) 0.15s both;
+}
+.emblem-shine-loop { animation: emblem-shine 1.5s var(--ease-ice) 0.15s both, emblem-shine-idle 7s ease-in-out 3s infinite; }
+@keyframes emblem-shine { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+@keyframes emblem-shine-idle { 0%, 78% { background-position: 150% 0; } 100% { background-position: -50% 0; } }
+@keyframes emblem-float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -8px, 0); } }
+.emblem-float { animation: emblem-float 7s ease-in-out infinite; }
+
+/* ---------- Marquee (mobile proof strip) ---------- */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee { animation: marquee 32s linear infinite; }
+.marquee:hover, .marquee:focus-within { animation-play-state: paused; }
+
+/* ---------- Icicle drip ---------- */
+@keyframes drip { 0% { transform: scaleY(0.6); } 100% { transform: scaleY(1); } }
+.drip { transform-origin: top; animation: drip 1.2s var(--ease-ice) both; }
+
+/* ---------- Scroll snap rails ---------- */
+.rail { scroll-snap-type: x mandatory; scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { scroll-snap-align: start; }
+
+/* ---------- Reduced motion: every effect has a static end state ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal-ready .reveal { opacity: 1; transform: none; transition: none; }
+  .frost-layer { display: none; }
+  .led-sweep, .drip, .marquee, .kenburns, .led-glow, .emblem-float { animation: none; transform: none; }
+  .emblem-shine { display: none; }
+  .ribbon-row { animation: none !important; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
